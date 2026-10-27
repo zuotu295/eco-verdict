@@ -1,0 +1,48 @@
+{
+  "claim_count": 2,
+  "claims": {
+    "demo-patagonia-100pct": {
+      "assess_receipt": {
+        "hash": "0xf6e18377d92c8466153212a35f48db09801d747579aa7a29c0015a387e21246b",
+        "result": "6",
+        "status": "7"
+      },
+      "record": {
+        "assessment_count": 1,
+        "category": "contradicted",
+        "claim_id": "demo-patagonia-100pct",
+        "claim_text": "Patagonia donates 100% of its sales to environmental groups.",
+        "filer": "0x5c4B20256c332bAcc951f40be09777Df18833C33",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+        ],
+        "status": "VERDICTED",
+        "subject": "Patagonia sales donation claim",
+        "summary": "Source 1 says Patagonia has committed 1% of total sales to environmental groups since 1985. That directly contradicts the claim that it donates 100% of its sales.",
+        "verdict": "GREENWASH"
+      }
+    },
+    "demo-patagonia-1pct": {
+      "assess_receipt": {
+        "hash": "0x84194651b91558d117ba715d4f5727184fe625be2521f61a7098a9669d010114",
+        "result": "6",
+        "status": "7"
+      },
+      "record": {
+        "assessment_count": 1,
+        "category": "supported",
+        "claim_id": "demo-patagonia-1pct",
+        "claim_text": "Patagonia commits 1% of its total sales to environmental groups.",
+        "filer": "0x5c4B20256c332bAcc951f40be09777Df18833C33",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+        ],
+        "status": "VERDICTED",
+        "subject": "Patagonia 1% for the Planet",
+        "summary": "Source 1 directly supports the claim, stating that since 1985, Patagonia has committed 1% of its total sales to environmental groups through One Percent for the Planet.",
+        "verdict": "GREEN"
+      }
+    }
+  },
+  "contract_address": "0xd7600e8782aAC7b5a87c0Dc256840b7AA6dB8003"
+}
