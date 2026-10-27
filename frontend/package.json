@@ -1,0 +1,17 @@
+{
+  "name": "eco-verdict-frontend",
+  "version": "1.0.0",
+  "description": "EcoVerdict web app (Vite + genlayer-js)",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "verify": "node scripts/verify-frontend-call.mjs"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^8.3.5"
+  },
+  "dependencies": {
+    "genlayer-js": "^1.1.8"
+  }
+}
