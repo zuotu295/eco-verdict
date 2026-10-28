@@ -99,3 +99,19 @@ genvm-linter 0.11.0, pytest 9.1.1; pins in
 `requirements.lock.txt`. Direct mode on a fresh machine may hit an
 HTTP 404 downloading GenVM v0.3.0-rc7; the local fix is copying the
 genvm-linter cached tarball into `~/.cache/gltest-direct/`.
+
+## Browser wallet regression tests
+
+Run `cd frontend && npm ci && npm test && npm run build`.
+The tests use EIP-1193 wallet doubles with no Snaps support and the
+actual pinned genlayer-js SDK. They cover existing/unknown networks,
+rejected authorization, empty accounts, a wallet that does not switch,
+standard-provider transaction forwarding and failed execution receipts.
+No test requires a private key or a funded account.
+
+Manual browser check: open the demo, connect the browser wallet,
+approve Stable Studionet (61999), and confirm that no Snap request
+appears. Rejecting a request must leave the button disconnected.
+Changing accounts or networks must clear the connected indicator;
+the next connection/write revalidates both. Wallet signing still needs
+the wallet owner's approval.

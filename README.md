@@ -91,12 +91,16 @@ suites cannot share one pytest process. See [TESTING.md](TESTING.md).
 
 ```
 cd frontend
-npm install
+npm ci
+npm test
 VITE_CONTRACT_ADDRESS=0xd7600e8782aAC7b5a87c0Dc256840b7AA6dB8003 npm run build
 ```
 
-Open the demo site, connect MetaMask (it switches to Studionet
-automatically), and file or assess claims. The frontend never holds
+Open the demo site and connect your browser wallet (for example,
+OKX Wallet or MetaMask). Approve the switch to Stable Studionet
+(chain 61999), then file or assess claims. No MetaMask Snap is
+required. If several extensions are installed, select the desired
+default Ethereum wallet in your extension settings before connecting. The frontend never holds
 a key: writes are signed in the user's own wallet.
 
 ## Sustained use

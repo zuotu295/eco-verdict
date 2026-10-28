@@ -5,7 +5,8 @@
   "scripts": {
     "build": "vite build",
     "preview": "vite preview",
-    "verify": "node scripts/verify-frontend-call.mjs"
+    "verify": "node scripts/verify-frontend-call.mjs",
+    "test": "node --test tests/*.test.js"
   },
   "license": "ISC",
   "devDependencies": {
@@ -13,5 +14,6 @@
   },
   "dependencies": {
     "genlayer-js": "^1.1.8"
-  }
+  },
+  "type": "module"
 }

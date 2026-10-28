@@ -1,8 +1,9 @@
 import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 import "./style.css";
+import { connectWallet, assertExecution } from "./wallet.js";
 
-const DEFAULT_CONTRACT = import.meta.env.VITE_CONTRACT_ADDRESS || "";
+const DEFAULT_CONTRACT = import.meta.env.VITE_CONTRACT_ADDRESS || "0xd7600e8782aAC7b5a87c0Dc256840b7AA6dB8003";
 const EXPLORER = "https://explorer-studio.genlayer.com";
 
 const $ = (id) => document.getElementById(id);
@@ -13,6 +14,8 @@ const short = (addr) =>
 
 let account = null;
 let client = null;
+let walletPending = null;
+let walletProvider = null;
 let contractAddress = localStorage.getItem("ev_contract") || DEFAULT_CONTRACT;
 let allClaims = [];
 let currentFilter = "ALL";
@@ -260,19 +263,39 @@ async function refreshList() {
   }
 }
 
+function resetWallet() {
+  account = null;
+  client = null;
+  $("wallet-btn").textContent = "Connect wallet";
+}
+
 async function ensureWallet() {
-  if (!window.ethereum)
-    throw new Error("No wallet found. Install MetaMask and try again.");
-  if (!account) {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    account = accounts[0];
-    $("wallet-btn").textContent = "Connected: " + short(account);
+  if (walletPending) return walletPending;
+  const provider = window.ethereum;
+  if (provider !== walletProvider) {
+    walletProvider?.removeListener?.("accountsChanged", resetWallet);
+    walletProvider?.removeListener?.("chainChanged", resetWallet);
+    walletProvider?.removeListener?.("disconnect", resetWallet);
+    walletProvider = provider;
+    provider?.on?.("accountsChanged", resetWallet);
+    provider?.on?.("chainChanged", resetWallet);
+    provider?.on?.("disconnect", resetWallet);
   }
-  client = createClient({ chain: studionet, account });
-  await client.connect("studionet");
-  return client;
+  $("wallet-btn").disabled = true;
+  walletPending = connectWallet(provider).then((session) => {
+    account = session.account;
+    client = session.client;
+    $("wallet-btn").textContent = "Connected: " + short(account);
+    showError("");
+    return client;
+  }).catch((err) => {
+    resetWallet();
+    throw err;
+  }).finally(() => {
+    walletPending = null;
+    $("wallet-btn").disabled = false;
+  });
+  return walletPending;
 }
 
 async function send(method, args) {
@@ -289,12 +312,13 @@ async function send(method, args) {
   setStage("sent");
   setTx(`Sent: ${hash}. Waiting for validator consensus…`, "", hash);
   setStage("consensus");
-  await c.waitForTransactionReceipt({
+  const receipt = await readClient().waitForTransactionReceipt({
     hash,
     status: "FINALIZED",
     interval: 3000,
     retries: 200,
   });
+  assertExecution(receipt);
   setStage("final");
   setTx(`Sealed on-chain: ${hash}`, "ok", hash);
 }
