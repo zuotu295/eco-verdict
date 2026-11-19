@@ -1,0 +1,129 @@
+{
+  "address": "0x6e391FcC542B31564C7c423eBD31918f3a372479",
+  "chain_id": 61999,
+  "source_sha256": "45c195789ed805730646d8656286e65cfcb6ad9853adc443e84dd8506a22e23e",
+  "transactions": [
+    {
+      "step": "deploy",
+      "hash": "0x19822d458956837ebb760c6c42270f5fca86e27d150f5c194fc59578e6ddb896",
+      "status": "7",
+      "execution_succeeded": true
+    },
+    {
+      "step": "file",
+      "hash": "0x3b70917bd7c4fe3c7b7e0ccc4349925a6c997baa9177f44dcc0cc05176da10b5",
+      "status": "7",
+      "execution_succeeded": true
+    },
+    {
+      "step": "assess",
+      "hash": "0x13e8a1acb86a2a2c3a2eb71f41cfc2b5692dfea2d06fae93c22b55fe88cdc17b",
+      "status": "7",
+      "execution_succeeded": true
+    },
+    {
+      "step": "queue_review",
+      "hash": "0x21eaa7b42ec8559e61b3d3ce73881fdf4cee3dcf8bde24c177b4f9c1dcd4ca9c",
+      "status": "7",
+      "execution_succeeded": true
+    },
+    {
+      "step": "reassess",
+      "hash": "0x925f91de3a072f08a352076a929befda5c2c906f762ea784362c96328db50f6a",
+      "status": "7",
+      "execution_succeeded": true
+    }
+  ],
+  "initial": {
+    "assessment_count": 1,
+    "category": "insufficient_evidence",
+    "claim_id": "patagonia-supplemental-review",
+    "claim_text": "Patagonia commits 1% of its total sales to environmental groups.",
+    "filer": "0xb99EB7911889250e9FFfFef0083abd7794e18D26",
+    "rounds": [
+      {
+        "category": "insufficient_evidence",
+        "round": 1,
+        "sources": [
+          "https://example.org/"
+        ],
+        "summary": "The provided source is a placeholder domain for documentation examples and contains no information regarding Patagonia's environmental giving.",
+        "verdict": "UNVERIFIED"
+      }
+    ],
+    "sources": [
+      "https://example.org/"
+    ],
+    "status": "VERDICTED",
+    "subject": "Patagonia environmental giving",
+    "summary": "The provided source is a placeholder domain for documentation examples and contains no information regarding Patagonia's environmental giving.",
+    "supplemental_sources": [],
+    "verdict": "UNVERIFIED"
+  },
+  "queued": {
+    "assessment_count": 1,
+    "category": "insufficient_evidence",
+    "claim_id": "patagonia-supplemental-review",
+    "claim_text": "Patagonia commits 1% of its total sales to environmental groups.",
+    "filer": "0xb99EB7911889250e9FFfFef0083abd7794e18D26",
+    "rounds": [
+      {
+        "category": "insufficient_evidence",
+        "round": 1,
+        "sources": [
+          "https://example.org/"
+        ],
+        "summary": "The provided source is a placeholder domain for documentation examples and contains no information regarding Patagonia's environmental giving.",
+        "verdict": "UNVERIFIED"
+      }
+    ],
+    "sources": [
+      "https://example.org/"
+    ],
+    "status": "REVIEW_PENDING",
+    "subject": "Patagonia environmental giving",
+    "summary": "The provided source is a placeholder domain for documentation examples and contains no information regarding Patagonia's environmental giving.",
+    "supplemental_sources": [
+      "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+    ],
+    "verdict": "UNVERIFIED"
+  },
+  "final": {
+    "assessment_count": 2,
+    "category": "supported",
+    "claim_id": "patagonia-supplemental-review",
+    "claim_text": "Patagonia commits 1% of its total sales to environmental groups.",
+    "filer": "0xb99EB7911889250e9FFfFef0083abd7794e18D26",
+    "rounds": [
+      {
+        "category": "insufficient_evidence",
+        "round": 1,
+        "sources": [
+          "https://example.org/"
+        ],
+        "summary": "The provided source is a placeholder domain for documentation examples and contains no information regarding Patagonia's environmental giving.",
+        "verdict": "UNVERIFIED"
+      },
+      {
+        "category": "supported",
+        "round": 2,
+        "sources": [
+          "https://example.org/",
+          "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+        ],
+        "summary": "Source 2 explicitly states that Patagonia has committed 1% of its total sales to environmental groups since 1985. Source 1 is unrelated, and no independent certification registry is provided.",
+        "verdict": "GREEN"
+      }
+    ],
+    "sources": [
+      "https://example.org/"
+    ],
+    "status": "VERDICTED",
+    "subject": "Patagonia environmental giving",
+    "summary": "Source 2 explicitly states that Patagonia has committed 1% of its total sales to environmental groups since 1985. Source 1 is unrelated, and no independent certification registry is provided.",
+    "supplemental_sources": [
+      "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+    ],
+    "verdict": "GREEN"
+  }
+}

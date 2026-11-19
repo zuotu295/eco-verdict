@@ -15,12 +15,18 @@ In the baseline, `VERDICTED` ended the case. A filer who found new evidence had 
 
 A review cannot change the claim wording, filer, or original URL list. Validator disagreement leaves the pending record available for retry. Review fetches the URLs live again. Historical round records preserve the URLs and decisions, while the contents at an external URL may change.
 
+## Submission summary
+
+> EcoVerdict v2 adds a bounded supplemental evidence workflow for environmental claims. The original filer can submit new sources under the same case ID, and GenLayer validators reassess the unchanged public statement using all cited evidence. Both rulings remain inspectable. On Stable Studionet, one claim moved from UNVERIFIED to GREEN after supplemental evidence while retaining its original decision.
+
+[Open the two-round demonstration](https://zuotu295.github.io/eco-verdict/?case=patagonia-supplemental-review#docket) · [Compare with the accepted baseline](https://github.com/zuotu295/eco-verdict/compare/90b14bbc7fe593a7d6b2c160ceab901b144c51a0...main)
+
 ## Deployment and verification
 
-- Candidate v2 contract on Stable Studionet (chain 61999) — [`0x6e391FcC542B31564C7c423eBD31918f3a372479`](https://explorer-studio.genlayer.com/address/0x6e391FcC542B31564C7c423eBD31918f3a372479).
+- v2 contract on Stable Studionet (chain 61999) — [`0x6e391FcC542B31564C7c423eBD31918f3a372479`](https://explorer-studio.genlayer.com/address/0x6e391FcC542B31564C7c423eBD31918f3a372479).
 - Deployment receipt — [`0x19822d45…ddb896`](https://explorer-studio.genlayer.com/tx/0x19822d458956837ebb760c6c42270f5fca86e27d150f5c194fc59578e6ddb896), `FINALIZED` with execution succeeded.
 - Deployed source SHA-256 — `45c195789ed805730646d8656286e65cfcb6ad9853adc443e84dd8506a22e23e`.
-- [Live acceptance test](tests_integration/test_review.py) checks the same Patagonia case through first assessment, evidence submission, and supplemental review. The intended demonstration is `UNVERIFIED → REVIEW_PENDING → GREEN`. Evidence and acceptance status are tracked in [evidence/v2/VERIFICATION.md](evidence/v2/VERIFICATION.md).
+- [Live acceptance test](tests_integration/test_review.py) checks the same Patagonia case through first assessment, evidence submission, and supplemental review. The verified progression is `UNVERIFIED → REVIEW_PENDING → GREEN`. Evidence and acceptance status are tracked in [evidence/v2/VERIFICATION.md](evidence/v2/VERIFICATION.md).
 
 ## Reproduce
 
