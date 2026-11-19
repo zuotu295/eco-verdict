@@ -34,6 +34,7 @@ let busy = false;
 let loading = false;
 let reviewEnabled = false;
 let contractReady = false;
+let requestedCase = new URL(window.location.href).searchParams.get("case");
 const pendingKey = "ecoverdict-pending-" + address.toLowerCase();
 
 function esc(value) {
@@ -110,6 +111,13 @@ function render() {
   const open = new Set(
     [...list.querySelectorAll("details[open]")].map((el) => el.dataset.id),
   );
+  if (
+    requestedCase &&
+    visible.some((claim) => claim.claim_id === requestedCase)
+  ) {
+    open.add(requestedCase);
+    requestedCase = null;
+  }
   list.innerHTML =
     visible.map((c) => recordCard(c, open.has(c.claim_id))).join("") ||
     '<p class="empty">No matching claims.</p>';
@@ -243,7 +251,10 @@ async function runWrite(method, args, expectedFiler) {
     value: 0n,
   });
   localStorage.setItem(pendingKey, hash);
-  if (dialog.open) dialog.close();
+  if (dialog.open) {
+    dialog.close();
+    $("docket").scrollIntoView({ block: "start" });
+  }
   await settle(hash);
 }
 

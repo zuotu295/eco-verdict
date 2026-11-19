@@ -65,7 +65,11 @@ test('SDK write uses the selected standard provider without Snaps', async () => 
   } finally { globalThis.fetch = originalFetch; }
 });
 test('finalized execution failures never display success', () => {
-  assert.doesNotThrow(() => assertExecution({ tx_execution_succeeded: true }));
-  assert.throws(() => assertExecution({ tx_execution_succeeded: false }), /without confirmed/);
+  const receipt = (result) => ({
+    status: 7,
+    consensus_data: { leader_receipt: [{ execution_result: result }] },
+  });
+  assert.doesNotThrow(() => assertExecution(receipt("SUCCESS")));
+  assert.throws(() => assertExecution(receipt("ERROR")), /without confirmed/);
   assert.throws(() => assertExecution({ status: 7 }), /without confirmed/);
 });

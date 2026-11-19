@@ -35,7 +35,9 @@ export async function connectWallet(provider) {
 }
 
 export function assertExecution(receipt) {
-  if (receipt?.tx_execution_succeeded !== true) {
+  const leaderReceipts = receipt?.consensus_data?.leader_receipt;
+  const leader = Array.isArray(leaderReceipts) ? leaderReceipts[0] : leaderReceipts;
+  if (leader?.execution_result !== "SUCCESS") {
     throw new Error("Transaction finalized without confirmed successful execution. Check the transaction in the explorer before retrying.");
   }
 }
