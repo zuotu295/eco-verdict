@@ -1,11 +1,13 @@
-# EVIDENCE.md — Recorded on-chain evidence for EcoVerdict
+# EcoVerdict v1 deployment evidence
+
+This is the historical evidence for the accepted v1 baseline. See the [current v2 deployment and verification](v2/VERIFICATION.md) and [live demonstration cases](v2/DEMO_CASES.md).
 
 Network: Stable Studionet (chain 61999, RPC `https://studio.genlayer.com/api`).
 Contract file SHA-256 at deployment:
 `26f5b96863e90519784ea406527fdf5e79be92cd107a77c810655780c3245c39`
 (unchanged since; the contract file was not modified after deployment).
 
-Canonical contract:
+Original v1 contract:
 `0xd7600e8782aAC7b5a87c0Dc256840b7AA6dB8003`
 Explorer:
 https://explorer-studio.genlayer.com/address/0xd7600e8782aAC7b5a87c0Dc256840b7AA6dB8003

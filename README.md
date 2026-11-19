@@ -4,6 +4,8 @@ EcoVerdict records public environmental claims, the evidence cited for them and 
 
 **Milestone v2** adds supplemental evidence and a second consensus review under the same claim ID. The filer can add up to three new HTTPS sources once. Anyone can trigger reassessment. The original and supplemental sources are considered together, and both decisions stay visible in the public record.
 
+- [Current v2 contract on Stable Studionet (chain 61999)](https://explorer-studio.genlayer.com/address/0x6e391FcC542B31564C7c423eBD31918f3a372479)
+- [Six demonstration cases and their chain records](evidence/v2/DEMO_CASES.md)
 - [Milestone scope, accepted baseline and reproduction](MILESTONE.md)
 - [v2 chain verification](evidence/v2/VERIFICATION.md)
 - [Official website](https://zuotu295.github.io/eco-verdict/)
