@@ -58,9 +58,9 @@ not cover the claim at all, or that cannot be loaded.
 Lifecycle
 ---------
 FILED -> VERDICTED (verdict GREEN, GREENWASH or UNVERIFIED).
-VERDICTED is terminal: a corrected claim is filed as a new record
-instead of rewriting history, so the docket stays an honest public
-record of what was claimed and what the sources showed.
+The filer can queue one supplemental review after the first verdict.
+Anyone can run that review. It considers the original and supplemental
+URLs, and both verdicts remain visible on the same claim.
 
 Scope and limits (see README.md and MECHANISM.md)
 -------------------------------------------------
@@ -273,6 +273,8 @@ class EcoVerdict(gl.Contract):
             "category": "",
             "summary": "",
             "assessment_count": 0,
+            "rounds": [],
+            "supplemental_sources": [],
         }
         # Claim ids are kept in creation order as one newline-joined
         # string under a single index key. This avoids int-to-string
@@ -283,13 +285,35 @@ class EcoVerdict(gl.Contract):
         return self._store(record)
 
     @gl.public.write
+    def request_review(self, claim_id: str, source_url_1: str, source_url_2: str,
+                       source_url_3: str) -> str:
+        record = self._load(claim_id)
+        if record["filer"] != str(gl.message.sender_address):
+            _fail("NOT_FILER", "only the filer may supplement this claim")
+        if record["status"] != "VERDICTED" or record["assessment_count"] != 1:
+            _fail("INVALID_STATUS", "review requires a first verdict and can run once")
+        supplemental = []
+        for url in (source_url_1, source_url_2, source_url_3):
+            if url == "":
+                continue
+            _validate_source_url(url, "supplemental source")
+            if url in record["sources"] or url in supplemental:
+                _fail("DUPLICATE_SOURCE", "supplemental sources must be new")
+            supplemental.append(url)
+        if not supplemental:
+            _fail("INVALID_INPUT", "at least one supplemental source is required")
+        record["supplemental_sources"] = supplemental
+        record["status"] = "REVIEW_PENDING"
+        return self._store(record)
+
+    @gl.public.write
     def assess_claim(self, claim_id) -> str:
         record = self._load(claim_id)
-        if record["status"] != "FILED":
+        if record["status"] not in ("FILED", "REVIEW_PENDING"):
             _fail("INVALID_STATUS", "claim is not awaiting assessment")
         claim_text = _sanitize_prompt_text(record["claim_text"])
         subject = _sanitize_prompt_text(record["subject"])
-        sources = record["sources"]
+        sources = record["sources"] + record["supplemental_sources"]
 
         def leader_fn():
             sections = []
@@ -381,7 +405,18 @@ class EcoVerdict(gl.Contract):
         record["category"] = consensus["category"]
         record["summary"] = consensus["summary"]
         record["assessment_count"] += 1
+        record["rounds"].append({
+            "round": record["assessment_count"],
+            "sources": sources,
+            "verdict": consensus["verdict"],
+            "category": consensus["category"],
+            "summary": consensus["summary"],
+        })
         return self._store(record)
+
+    @gl.public.view
+    def get_protocol(self) -> str:
+        return "eco-verdict-2"
 
     @gl.public.view
     def get_claim(self, claim_id) -> str:

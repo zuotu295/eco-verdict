@@ -23,6 +23,8 @@ FORBIDDEN_IMPORTS = {
 EXPECTED_METHODS = {
     "file_claim": ("write", "str"),
     "assess_claim": ("write", "str"),
+    "request_review": ("write", "str"),
+    "get_protocol": ("view", "str"),
     "get_claim": ("view", "str"),
     "get_status": ("view", "str"),
     "get_claim_count": ("view", "str"),

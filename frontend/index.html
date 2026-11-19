@@ -2,238 +2,227 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EcoVerdict — The Green Court</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Every green claim gets its day in court. File a public environmental claim with its sources; GenLayer validators fetch them live and reach consensus on the verdict."
+      content="A public docket for environmental claims and the evidence behind them."
     />
+    <meta name="theme-color" content="#172c25" />
+    <title>EcoVerdict — Environmental Claims Docket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <canvas id="leaves" aria-hidden="true"></canvas>
-    <div class="grain" aria-hidden="true"></div>
-
-    <header class="hero">
-      <div class="hero-frame">
-        <svg class="vine vine-left" viewBox="0 0 120 420" aria-hidden="true">
-          <path
-            d="M60 410 C 20 340, 100 300, 60 230 C 20 160, 100 120, 60 50"
-            fill="none"
-          />
-          <circle cx="60" cy="410" r="5" />
-          <circle cx="60" cy="50" r="5" />
-        </svg>
-        <svg class="vine vine-right" viewBox="0 0 120 420" aria-hidden="true">
-          <path
-            d="M60 410 C 100 340, 20 300, 60 230 C 100 160, 20 120, 60 50"
-            fill="none"
-          />
-          <circle cx="60" cy="410" r="5" />
-          <circle cx="60" cy="50" r="5" />
-        </svg>
-
-        <div class="seal" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <defs>
-              <path
-                id="seal-ring"
-                d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"
-              />
-            </defs>
-            <circle cx="60" cy="60" r="56" class="seal-outer" />
-            <circle cx="60" cy="60" r="34" class="seal-inner" />
-            <text class="seal-text"><textPath href="#seal-ring">ECO VERDICT · GREEN COURT · EST. ON-CHAIN ·</textPath></text>
-            <text x="60" y="70" class="seal-leaf">❦</text>
-          </svg>
-        </div>
-
-        <p class="eyebrow">The Court of Public Green Claims</p>
-        <h1>Eco<em>Verdict</em></h1>
-        <p class="hero-sub">
-          Every green claim gets its day in court. File a company's public
-          environmental claim with its sources; independent GenLayer
-          validators fetch those sources live and must agree exactly on
-          the verdict before it is sealed on-chain.
-        </p>
-        <div class="hero-actions">
-          <a class="btn gold" href="#dossier">File a claim</a>
-          <a class="btn ghost" href="#docket">Open the docket</a>
-        </div>
-        <p class="hero-note" id="chain-note"></p>
+    <header class="top">
+      <div class="shell bar">
+        <a class="brand" href="./"
+          ><span class="brand-mark" aria-hidden="true">EV</span>EcoVerdict</a
+        >
+        <nav aria-label="Main navigation">
+          <a href="#docket">Docket</a><a href="#method">Method</a>
+        </nav>
+        <button id="wallet" class="button outline">Connect wallet</button>
       </div>
     </header>
-
     <main>
-      <section class="ledger" aria-label="Docket ledger">
-        <div class="ledger-item">
-          <span class="ledger-num" id="count">–</span>
-          <span class="ledger-label">Claims filed</span>
-        </div>
-        <div class="ledger-item">
-          <span class="ledger-num green" id="count-green">–</span>
-          <span class="ledger-label">Genuinely green</span>
-        </div>
-        <div class="ledger-item">
-          <span class="ledger-num red" id="count-greenwash">–</span>
-          <span class="ledger-label">Greenwash</span>
-        </div>
-        <div class="ledger-item">
-          <span class="ledger-num amber" id="count-unverified">–</span>
-          <span class="ledger-label">Unverified</span>
-        </div>
-      </section>
-
-      <section class="panel" id="dossier">
-        <div class="panel-head">
-          <h2>File a claim</h2>
-          <p>
-            A claim is a public environmental statement plus the sources
-            that should prove it. Link the specific page that carries the
-            claim, not a report homepage.
-          </p>
-        </div>
-        <div class="wallet-row">
-          <button id="wallet-btn" class="btn gold" type="button">
-            Connect wallet
-          </button>
-          <button id="demo-btn" class="btn ghost" type="button">
-            Load demo contract
-          </button>
-          <form id="contract-form" class="contract-form">
-            <label>
-              Contract address
-              <input
-                id="contract-address"
-                type="text"
-                placeholder="0x…"
-                autocomplete="off"
-              />
-            </label>
-            <button class="btn ghost" type="submit">Use contract</button>
-            <a id="explorer-link" class="explorer-link" target="_blank" rel="noreferrer">
-              View on Studionet explorer →
-            </a>
-          </form>
-        </div>
-
-        <form id="create-form" class="dossier-form">
-          <label>
-            Claim ID <span class="hint">letters, digits, - and _ only, max 64</span>
-            <input id="f-id" type="text" maxlength="64" required placeholder="e.g. demo-patagonia-1pct" />
-          </label>
-          <label>
-            Subject <span class="hint">who or what the claim is about, max 128</span>
-            <input id="f-subject" type="text" maxlength="128" required placeholder="e.g. Patagonia 1% for the Planet" />
-          </label>
-          <label>
-            Claim text <span class="hint">10–500 characters, as stated in public</span>
-            <textarea id="f-claim" rows="3" maxlength="500" required placeholder="e.g. Patagonia commits 1% of its total sales to environmental groups."></textarea>
-          </label>
-          <label>
-            Source URL 1 <span class="hint">required, https only</span>
-            <input id="f-s1" type="url" required placeholder="https://…" />
-          </label>
-          <label>
-            Source URL 2 <span class="hint">optional</span>
-            <input id="f-s2" type="url" placeholder="https://…" />
-          </label>
-          <label>
-            Source URL 3 <span class="hint">optional</span>
-            <input id="f-s3" type="url" placeholder="https://…" />
-          </label>
-          <button class="btn gold wide" type="submit">Seal the filing ✦</button>
-        </form>
-
-        <div class="proceedings" aria-live="polite">
-          <ol class="steps">
-            <li data-step="sign">Signature</li>
-            <li data-step="sent">Sent</li>
-            <li data-step="consensus">Validator consensus</li>
-            <li data-step="final">Sealed · FINALIZED</li>
-          </ol>
-          <div id="tx-status" class="tx"></div>
-        </div>
-        <p id="error" class="error" hidden></p>
-      </section>
-
-      <section class="docket" id="docket">
-        <div class="docket-head">
-          <h2>The Docket</h2>
-          <div class="filters" role="group" aria-label="Filter claims">
-            <button data-filter="ALL" aria-pressed="true">All</button>
-            <button data-filter="FILED" aria-pressed="false">Awaiting verdict</button>
-            <button data-filter="GREEN" aria-pressed="false">Green</button>
-            <button data-filter="GREENWASH" aria-pressed="false">Greenwash</button>
-            <button data-filter="UNVERIFIED" aria-pressed="false">Unverified</button>
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div>
+            <p class="overline">Environmental claims docket</p>
+            <h1>Claims, meet<br /><em>evidence.</em></h1>
+            <p class="intro">
+              See which public environmental claims their sources support.
+              Follow each ruling from the first assessment through supplemental
+              review.
+            </p>
+            <div class="actions">
+              <button class="button lime" id="open-file" disabled>
+                File a claim <span aria-hidden="true">↗</span></button
+              ><a href="#docket">Browse docket ↓</a>
+            </div>
           </div>
-          <button id="refresh-btn" class="btn ghost small" type="button">Refresh docket</button>
-        </div>
-        <div id="claim-list" class="claim-list">
-          <p class="muted">Loading…</p>
+          <div class="hero-aside">
+            <span class="network"><i></i> Stable Studionet</span>
+            <div class="orbit" aria-hidden="true">
+              <span></span><span></span><span></span><b>EV</b>
+            </div>
+            <a
+              id="explorer"
+              href="https://explorer-studio.genlayer.com"
+              target="_blank"
+              rel="noreferrer"
+              >View contract ↗</a
+            >
+          </div>
         </div>
       </section>
-
-      <section class="how">
-        <h2>How a verdict is reached</h2>
-        <div class="how-grid">
-          <article>
-            <span class="how-num">I</span>
-            <h3>The filing</h3>
-            <p>
-              A claim and its sources are written to the docket exactly
-              as filed. Nothing is edited afterwards; a corrected claim
-              is a new filing.
-            </p>
-          </article>
-          <article>
-            <span class="how-num">II</span>
-            <h3>The fetching</h3>
-            <p>
-              Each validator independently loads the filed sources live
-              from the open web. Page text is read, never stored, and
-              never compared.
-            </p>
-          </article>
-          <article>
-            <span class="how-num">III</span>
-            <h3>The consensus</h3>
-            <p>
-              Validators must agree exactly on the verdict and the
-              reason category. Only then is the verdict sealed
-              on-chain; summary wording may differ.
-            </p>
-          </article>
-          <article>
-            <span class="how-num">IV</span>
-            <h3>The weight of proof</h3>
-            <p>
-              Independent certification registries outweigh company
-              self-statements. A 100% claim backed only by a future
-              goal is greenwash, not a close call.
-            </p>
-          </article>
+      <section
+        class="shell workspace"
+        id="docket"
+        aria-labelledby="docket-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="overline">Public records</p>
+            <h2 id="docket-title">The docket</h2>
+          </div>
+          <button id="refresh" class="button quiet">Refresh ↻</button>
         </div>
-        <p class="how-foot">
-          Honest limits: the court judges the filed sources only. It does
-          not audit internal company records, test products in a lab, or
-          prove that a source document itself is genuine.
-        </p>
+        <div id="notice" role="status" aria-live="polite"></div>
+        <dl class="stats">
+          <div>
+            <dt>Claims filed</dt>
+            <dd id="total">—</dd>
+          </div>
+          <div>
+            <dt>Supported</dt>
+            <dd id="green">—</dd>
+          </div>
+          <div>
+            <dt>Greenwash</dt>
+            <dd id="greenwash">—</dd>
+          </div>
+          <div>
+            <dt>Unverified</dt>
+            <dd id="unverified">—</dd>
+          </div>
+        </dl>
+        <div class="toolbar">
+          <label
+            >Search docket
+            <input
+              type="search"
+              id="search"
+              placeholder="Subject, claim or case ID"
+          /></label>
+          <label
+            >Filter by
+            <select id="filter">
+              <option value="">All records</option>
+              <option value="FILED">Awaiting assessment</option>
+              <option value="REVIEW_PENDING">Review pending</option>
+              <option value="GREEN">Supported</option>
+              <option value="GREENWASH">Greenwash</option>
+              <option value="UNVERIFIED">Unverified</option>
+            </select></label
+          >
+        </div>
+        <div id="list" aria-live="polite"></div>
+      </section>
+      <section class="method" id="method">
+        <div class="shell method-grid">
+          <h2>How rulings work</h2>
+          <div>
+            <h3>File</h3>
+            <p>
+              Record the published statement and cite up to three public HTTPS
+              sources.
+            </p>
+          </div>
+          <div>
+            <h3>Assess</h3>
+            <p>
+              GenLayer validators read the cited pages and agree on the verdict
+              and reason category.
+            </p>
+          </div>
+          <div>
+            <h3>Review</h3>
+            <p>
+              The filer can add evidence once. Validators reassess all cited
+              sources and both rulings stay visible.
+            </p>
+          </div>
+        </div>
       </section>
     </main>
-
-    <footer>
-      <p>
-        EcoVerdict · Stable Studionet · Chain ID 61999 · test network only,
-        no real funds · Verdicts judge filed sources, not companies.
-      </p>
+    <footer class="shell">
+      <span>EcoVerdict</span>
+      <div class="footer-links">
+        <a id="archive" target="_blank" rel="noreferrer">Original contract ↗</a
+        ><a href="https://github.com/zuotu295/eco-verdict"
+          >Source &amp; evidence ↗</a
+        >
+      </div>
     </footer>
-
+    <dialog id="form-dialog" aria-labelledby="form-title">
+      <div class="section-head">
+        <h2 id="form-title"></h2>
+        <button
+          id="close"
+          type="button"
+          class="button quiet"
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
+      <form id="write-form">
+        <div id="claim-fields">
+          <label
+            >Case ID
+            <input
+              name="id"
+              maxlength="64"
+              pattern="[A-Za-z0-9_\-]+"
+              placeholder="e.g. recycled-packaging"
+              required
+          /></label>
+          <label
+            >Subject
+            <input
+              name="subject"
+              maxlength="128"
+              placeholder="Company, product or initiative"
+              required
+          /></label>
+          <label
+            >Published claim
+            <textarea
+              name="claim"
+              minlength="10"
+              maxlength="500"
+              rows="3"
+              required
+            ></textarea>
+          </label>
+        </div>
+        <label
+          >Evidence URL
+          <input
+            name="source1"
+            type="url"
+            pattern="https://.+"
+            maxlength="500"
+            placeholder="https://…"
+            required
+        /></label>
+        <label
+          >Second URL <small>Optional</small
+          ><input
+            name="source2"
+            type="url"
+            pattern="https://.+"
+            maxlength="500"
+        /></label>
+        <label
+          >Third URL <small>Optional</small
+          ><input
+            name="source3"
+            type="url"
+            pattern="https://.+"
+            maxlength="500"
+        /></label>
+        <p id="form-error" role="alert" hidden></p>
+        <button class="button primary" id="submit-write" type="submit">
+          Submit to Studionet
+        </button>
+      </form>
+    </dialog>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

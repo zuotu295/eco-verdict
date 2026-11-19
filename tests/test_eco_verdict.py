@@ -236,3 +236,50 @@ def test_multiple_claims_are_independent(env):
     assert first.get_claim_id(2) == ""
     assert json.loads(first.get_claim("c2"))["status"] == "FILED"
     assert json.loads(first.get_claim("c1"))["status"] == "FILED"
+
+
+def test_supplemental_review_keeps_initial_decision(env):
+    contract = _filed(env)
+    initial = json.loads(contract.assess_claim("c1"))
+    assert initial["verdict"] == "UNVERIFIED"
+
+    queued = json.loads(contract.request_review("c1", SOURCE_2, "", ""))
+    assert queued["status"] == "REVIEW_PENDING"
+    assert queued["rounds"] == initial["rounds"]
+    env.set_sender("0xReviewer")
+    env.set_pages({SOURCE_2: "Certification evidence for the claim."})
+    final = _assess(contract, env, GREEN, GREEN)
+    assert final["verdict"] == "GREEN"
+    assert final["assessment_count"] == 2
+    assert final["rounds"][0] == initial["rounds"][0]
+    assert final["rounds"][1]["sources"] == [SOURCE_1, SOURCE_2]
+    assert final["sources"] == [SOURCE_1]
+    assert final["filer"] == initial["filer"]
+    assert contract.get_claim_count() == "1"
+    env.set_sender("0xOwner")
+    with pytest.raises(_UserError, match="INVALID_STATUS"):
+        contract.request_review("c1", "https://example.org/another", "", "")
+
+
+def test_review_guards_and_consensus_failure_leave_record_unchanged(env):
+    contract = _filed(env)
+    with pytest.raises(_UserError, match="INVALID_STATUS"):
+        contract.request_review("c1", SOURCE_2, "", "")
+    contract.assess_claim("c1")
+    env.set_sender("0xOther")
+    with pytest.raises(_UserError, match="NOT_FILER"):
+        contract.request_review("c1", SOURCE_2, "", "")
+    env.set_sender("0xOwner")
+    for urls in [(SOURCE_1, "", ""), (SOURCE_2, SOURCE_2, "")]:
+        with pytest.raises(_UserError, match="DUPLICATE_SOURCE"):
+            contract.request_review("c1", *urls)
+    with pytest.raises(_UserError, match="INVALID_INPUT"):
+        contract.request_review("c1", "", "", "")
+    pending = contract.request_review("c1", SOURCE_2, "", "")
+    with pytest.raises(_UserError, match="INVALID_STATUS"):
+        contract.request_review("c1", "https://example.org/another", "", "")
+    env.set_pages({SOURCE_2: "Certification evidence for the claim."})
+    with pytest.raises(RuntimeError, match="validator rejected"):
+        _assess(contract, env, GREEN, GREENWASH)
+    assert contract.get_claim("c1") == pending
+    assert _assess(contract, env, GREEN, GREEN)["status"] == "VERDICTED"

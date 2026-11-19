@@ -1,5 +1,7 @@
 # MECHANISM.md — How EcoVerdict decides
 
+This document describes the accepted v1 baseline. For the v2 lifecycle and current verification, see [MILESTONE.md](MILESTONE.md) and [v2 evidence](evidence/v2/VERIFICATION.md).
+
 ## The problem
 
 A green claim is a sentence a company publishes about its own

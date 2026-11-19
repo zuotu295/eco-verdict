@@ -1,5 +1,7 @@
 # TESTING.md — How EcoVerdict is tested
 
+This document describes the accepted v1 baseline. For the v2 lifecycle and current verification, see [MILESTONE.md](MILESTONE.md) and [v2 evidence](evidence/v2/VERIFICATION.md).
+
 ## Layers
 
 ### 1. Stand-in suite — `tests/` (20 passed)
