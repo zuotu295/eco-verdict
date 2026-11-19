@@ -311,7 +311,9 @@ textarea {
   font-size: 0.8rem;
   margin: 8px 0;
 }
-.quote {
+.case-preview {
+  display: block;
+  color: var(--muted);
   margin: 14px 0;
   padding-left: 12px;
   border-left: 2px solid #aab987;
@@ -492,4 +494,10 @@ small {
   gap: 16px;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+.tag.demo {
+  margin-left: 4px;
+  background: transparent;
+  border: 1px solid var(--line);
 }

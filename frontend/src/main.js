@@ -79,6 +79,15 @@ function roundCard(round) {
     <p>${esc(round.summary)}</p>${sources(round.sources)}</section>`;
 }
 
+const demoCases = new Set([
+  "patagonia-supplemental-review",
+  "demo-giving-since-1985",
+  "demo-all-sales-claim",
+  "demo-packaging-evidence-gap",
+  "demo-annual-report-review",
+  "demo-certification-awaiting",
+]);
+
 function recordCard(c, open) {
   const rounds = c.rounds ?? (c.assessment_count ? [{ ...c, round: 1 }] : []);
   const awaiting = ["FILED", "REVIEW_PENDING"].includes(c.status);
@@ -86,9 +95,11 @@ function recordCard(c, open) {
     reviewEnabled && c.status === "VERDICTED" && c.assessment_count === 1;
   const filer = wallet?.account.toLowerCase() === c.filer.toLowerCase();
   return `<details class="record" data-id="${esc(c.claim_id)}" ${open ? "open" : ""}>
-    <summary><h3>${esc(c.subject)}</h3> ${badge(awaiting ? c.status : c.verdict)}</summary>
+    <summary><h3>${esc(c.subject)}</h3> ${badge(awaiting ? c.status : c.verdict)}
+      ${address.toLowerCase() === deployment.address.toLowerCase() && demoCases.has(c.claim_id) ? '<span class="tag demo">Demo case</span>' : ""}
+      <span class="case-preview">“${esc(c.claim_text)}”</span>
+    </summary>
     <p class="meta">Case ${esc(c.claim_id)} · Filed by ${esc(c.filer)}</p>
-    <p class="quote">“${esc(c.claim_text)}”</p>
     ${rounds.length ? `<div class="rounds">${rounds.map(roundCard).join("")}</div>` : sources(c.sources)}
     ${c.status === "REVIEW_PENDING" ? `<h4>New evidence queued</h4>${sources(c.supplemental_sources)}` : ""}
     ${awaiting ? `<button class="button primary" data-action="assess">${c.status === "FILED" ? "Run assessment" : "Run supplemental review"}</button>` : ""}
@@ -160,10 +171,19 @@ async function refresh(announce = true) {
     if (!Number.isSafeInteger(count) || count < 0)
       throw new Error("Invalid docket count.");
     const loaded = [];
-    for (let i = count - 1; i >= 0; i -= 1) {
-      const id = await readMethod("get_claim_id", [i]);
-      const raw = await readMethod("get_claim", [id]);
-      loaded.push(JSON.parse(raw));
+    const batchSize = 4;
+    for (let end = count; end > 0; end -= batchSize) {
+      const indices = Array.from(
+        { length: Math.min(end, batchSize) },
+        (_, i) => end - 1 - i,
+      );
+      const batch = await Promise.all(
+        indices.map(async (index) => {
+          const id = await readMethod("get_claim_id", [index]);
+          return JSON.parse(await readMethod("get_claim", [id]));
+        }),
+      );
+      loaded.push(...batch);
     }
     contractReady = true;
     $("open-file").disabled = false;
