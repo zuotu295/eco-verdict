@@ -28,6 +28,8 @@ A review cannot change the claim wording, filer, or original URL list. Validator
 - Deployed source SHA-256 — `45c195789ed805730646d8656286e65cfcb6ad9853adc443e84dd8506a22e23e`.
 - [Live acceptance test](tests_integration/test_review.py) checks the same Patagonia case through first assessment, evidence submission, and supplemental review. The verified progression is `UNVERIFIED → REVIEW_PENDING → GREEN`. Evidence and acceptance status are tracked in [evidence/v2/VERIFICATION.md](evidence/v2/VERIFICATION.md).
 
+[Additional demonstration cases](evidence/v2/DEMO_CASES.md) cover pending assessment, all three verdicts, and pending supplemental review.
+
 ## Reproduce
 
 ```bash
